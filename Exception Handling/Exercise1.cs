@@ -10,51 +10,52 @@ namespace Exception_Handling
     {
         public static int? Divide(double a, double b)
         {
-
                 return (int)a / (int)b;
-
-            
         }
         public static void DivideUserInputs()
         {
 
             while (true)
             {
-                try
+                InputResult inputs = GetUserInputs();
+                if (inputs.Success)
                 {
-                    double[] inputs = GetUserInputs();
-                    Console.WriteLine(Divide(inputs[0], inputs[1]));
-                    int divideTest = (int)inputs[0] / (int)inputs[1];
+                    Console.WriteLine(Divide(inputs.Result[0], inputs.Result[1]));
                     break;
-                }
-                catch (FormatException ex)
+                } else
                 {
-                    Console.WriteLine(ex.Message);
-                }
-                catch (DivideByZeroException)
-                {
-                    Console.WriteLine("Cannot divide by zero. Try again.");
+                    Console.WriteLine(inputs.Message);
                 }
             }
 
         }
-        private static double[] GetUserInputs()
+        private static InputResult GetUserInputs()
         {
             Console.WriteLine("Enter divisor:");
             if (!Double.TryParse(Console.ReadLine(), out double divisor))
             {
-                throw new FormatException("Invalid input. Please try again.");
+                return new InputResult(false, null, "Invalid input. Please try again.");
             }
             Console.WriteLine("Enter dividend:");
             if (!Double.TryParse(Console.ReadLine(), out double dividend))
             {
-                throw new FormatException("Invalid input. Please try again.");
+                return new InputResult(false, null, "Invalid input. Please try again.");
             }
-            if (divisor < 0 || dividend < 0)
+
+            if (dividend == 0) return new InputResult(false, null, "Cannot divide by 0. Please try again.");
+            
+            List<double> invalidInputs = new List<double>();
+            if (divisor < 0) invalidInputs.Add(divisor);
+            if (dividend < 0) invalidInputs.Add(dividend);
+
+            if (invalidInputs.Count == 1)
             {
-                throw new NegativeIntegerInputException();
+                return new InputResult(false, null, $"The following negative integer(s) are not allowed in this operation: [{invalidInputs[0]}]");
+            } else if (invalidInputs.Count == 2)
+            {
+                return new InputResult(false, null, $"The following negative integer(s) are not allowed in this operation: [{invalidInputs[0]}] and [{invalidInputs[1]}]");
             }
-            return [divisor, dividend];
+            return new InputResult(true, [divisor, dividend], "");
         }
     }
 }

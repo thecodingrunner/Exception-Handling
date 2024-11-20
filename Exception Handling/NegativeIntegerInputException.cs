@@ -8,5 +8,7 @@ namespace Exception_Handling
 {
     public class NegativeIntegerInputException : Exception
     {
+        public NegativeIntegerInputException(string message)
+        : base(message) { }
     }
 }
