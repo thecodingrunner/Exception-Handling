@@ -8,9 +8,12 @@ namespace Exception_Handling
 {
     internal class Exercise1
     {
-        public static double Divide(double a, double b)
+        public static int? Divide(double a, double b)
         {
-            return a / b;
+
+                return (int)a / (int)b;
+
+            
         }
         public static void DivideUserInputs()
         {
@@ -21,11 +24,16 @@ namespace Exception_Handling
                 {
                     double[] inputs = GetUserInputs();
                     Console.WriteLine(Divide(inputs[0], inputs[1]));
+                    int divideTest = (int)inputs[0] / (int)inputs[1];
                     break;
                 }
                 catch (FormatException ex)
                 {
                     Console.WriteLine(ex.Message);
+                }
+                catch (DivideByZeroException)
+                {
+                    Console.WriteLine("Cannot divide by zero. Try again.");
                 }
             }
 
@@ -41,6 +49,10 @@ namespace Exception_Handling
             if (!Double.TryParse(Console.ReadLine(), out double dividend))
             {
                 throw new FormatException("Invalid input. Please try again.");
+            }
+            if (divisor < 0 || dividend < 0)
+            {
+                throw new NegativeIntegerInputException();
             }
             return [divisor, dividend];
         }
