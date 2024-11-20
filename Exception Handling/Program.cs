@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Exercise1.DivideUserInputs();
+            //Exercise1.DivideUserInputs();
+            Exercise2.HealthInsuranceDataInput();
         }
     }
 }
