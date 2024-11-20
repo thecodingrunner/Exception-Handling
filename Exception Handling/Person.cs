@@ -18,20 +18,20 @@ namespace Exception_Handling
         public bool WeightValid { get; set; }   
         public bool? Employed { get; set; }
         public bool EmployedValid { get; set; }
-        public string? Occuptaion { get; set; }
-        public bool OccuptationValid { get; set; }
+        public string? Occupation { get; set; }
+        public bool OccupationValid { get; set; }
         public bool? Student { get; set; }
         public bool StudentValid { get; set; }
 
 
-        public Person(string? name, int? age, double? height, double? weight, bool? employed, string? occuptaion, bool? student)
+        public Person(string? name, int? age, double? height, double? weight, bool? employed, string? occupation, bool? student)
         {
             Name = name;
             Age = age;
             Height = height;
             Weight = weight;
             Employed = employed;
-            Occuptaion = occuptaion;
+            Occupation = occupation;
             Student = student;
 
             NameValid = false;
@@ -39,7 +39,7 @@ namespace Exception_Handling
             HeightValid = false;
             WeightValid = false;
             EmployedValid = false;
-            OccuptationValid = false;
+            OccupationValid = false;
             StudentValid = false;
         }
     }

@@ -27,12 +27,10 @@ namespace Exception_Handling
             double height = (double)inputPerson.Height;
 
             // Height
-            Console.WriteLine("Enter your weight (in kilograms): ");
-            string weight = Console.ReadLine();
+            double weight = (double)inputPerson.Weight;
 
             // Employment
-            Console.WriteLine("Are you employed?: ");
-            string employed = Console.ReadLine();
+            bool employed = (bool)inputPerson.Employed;
 
             // Occupation
             Console.WriteLine("What is your occupation?: ");
@@ -107,39 +105,41 @@ namespace Exception_Handling
                     Console.WriteLine(ex.Message);
                 }
             }
+
             while (!personInput.AgeValid)
+            {
+                string ageInput;
+                try
                 {
-                    string ageInput;
-                    try
-                    {
-                        Console.WriteLine("Enter your age: ");
-                        ageInput = Console.ReadLine();
+                    Console.WriteLine("Enter your age: ");
+                    ageInput = Console.ReadLine();
 
-                        if (String.IsNullOrEmpty(ageInput))
-                        {
-                            throw new NullReferenceException("No age was entered.");
-                        }
-                        if (!Int32.TryParse(ageInput, out int j))
-                        {
-                            throw new ArgumentException("An age must be a valid number.");
-                        }
-                        personInput.Age = j;
+                    if (String.IsNullOrEmpty(ageInput))
+                    {
+                        throw new NullReferenceException("No age was entered.");
+                    }
+                    if (!Int32.TryParse(ageInput, out int j))
+                    {
+                        throw new ArgumentException("An age must be a valid number.");
+                    }
+                    personInput.Age = j;
 
-                        if (personInput.Age <= 0)
-                        {
-                            throw new ArgumentException("Age must be above 0");
-                        }
-                        personInput.AgeValid = true;
-                    }
-                    catch (ArgumentException ex)
+                    if (personInput.Age <= 0)
                     {
-                        Console.WriteLine(ex.Message);
+                        throw new ArgumentException("Age must be above 0");
                     }
-                    catch (NullReferenceException ex)
-                    {
-                        Console.WriteLine(ex.Message);
-                    }
+                    personInput.AgeValid = true;
                 }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
             while (!personInput.HeightValid)
             {
                 string heightInput;
@@ -158,7 +158,7 @@ namespace Exception_Handling
                     }
                     personInput.Height = j;
 
-                    if (personInput.Height < 0)
+                    if (personInput.Height <= 0)
                     {
                         throw new ArgumentException("Height is too small.");
                     }
@@ -178,6 +178,102 @@ namespace Exception_Handling
                 }
             }
 
+            while (!personInput.WeightValid)
+            {
+                string weightInput;
+                try
+                {
+                    Console.WriteLine("Enter your weight (in kg): ");
+                    weightInput = Console.ReadLine();
+
+                    if (String.IsNullOrEmpty(weightInput))
+                    {
+                        throw new NullReferenceException("No weight was entered.");
+                    }
+                    if (!Double.TryParse(weightInput, out double j))
+                    {
+                        throw new ArgumentException("Weight must be a valid number.");
+                    }
+                    personInput.Weight = j;
+
+                    if (personInput.Weight <= 0)
+                    {
+                        throw new ArgumentException("Weight is too small.");
+                    }
+                    if (personInput.Weight > 650)
+                    {
+                        throw new ArgumentException("You're too heavy.");
+                    }
+                    personInput.WeightValid = true;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                catch (NullReferenceException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            while (!personInput.EmployedValid)
+            {
+                string isEmployedString;
+                try
+                {
+                    Console.WriteLine("Are you employed? (Y/N)");
+                    isEmployedString = Console.ReadLine().ToLower();
+
+                    if (isEmployedString != "y" && isEmployedString != "n")
+                    {
+                        throw new ArgumentException("Please enter a valid response.");
+                    }
+
+                    if (isEmployedString == "y")
+                    {
+                        personInput.Employed = true;
+                    } else
+                    {
+                        personInput.Employed = false;
+                    }
+
+                    personInput.EmployedValid = true;
+                }
+                catch (ArgumentException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            if (personInput.Employed == true)
+            {
+                while (!personInput.Occupation)
+                {
+                    try
+                    {
+                        Console.WriteLine("Enter your full name: ");
+                        personInput.Name = Console.ReadLine();
+                        if (String.IsNullOrEmpty(personInput.Name))
+                        {
+                            throw new NullReferenceException("No name was entered.");
+                        }
+                        if (!personInput.Name.Contains(" "))
+                        {
+                            throw new InvalidNameException("Must include first and last name, seperated by a space");
+                        }
+
+                        personInput.NameValid = true;
+                    }
+                    catch (InvalidNameException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                    catch (NullReferenceException ex)
+                    {
+                        Console.WriteLine(ex.Message);
+                    }
+                }
+            }
 
             return personInput;
         }
